@@ -32,10 +32,10 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "start": "expo start",
+    "start": "NODE_OPTIONS=--dns-result-order=ipv4first expo start --dev-client --localhost",
+    "android": "expo run:android --device --no-bundler",
+    "ios": "expo run:ios --device --no-bundler",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint"
   },
