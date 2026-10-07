@@ -5,7 +5,7 @@ const css = require('@eslint/css').default;
 
 module.exports = defineConfig([
   {
-    ignores: ['dist/**', '.expo/**'],
+    ignores: ['dist/**', '.expo/**', '.rnstorybook/storybook.requires.ts'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],

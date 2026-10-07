@@ -3,7 +3,33 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "packageManager": "bun@1.3.14",
+  "scripts": {
+    "pull": "bunx eas-cli env:pull --environment development --path .env.local",
+    "pull:preview": "bunx eas-cli env:pull --environment preview --path .env.local",
+    "android": "expo run:android --device --no-bundler",
+    "ios": "expo run:ios --device --no-bundler",
+    "web": "expo start --web",
+    "start": "NODE_OPTIONS=--dns-result-order=ipv4first expo start --dev-client --localhost",
+    "storybook": "STORYBOOK_ENABLED=true bun run start --clear",
+    "storybook:android": "bun run storybook --android",
+    "storybook:ios": "bun run storybook --ios",
+    "storybook-generate": "sb-rn-get-stories",
+    "lint": "bun run storybook-generate && eslint . --max-warnings 0",
+    "typecheck": "bun run storybook-generate && tsc --noEmit",
+    "knip": "bun run storybook-generate && knip",
+    "staticchecks": "bun run lint && bun run typecheck && bun run knip",
+    "preview": "bunx eas-cli build --platform all --profile preview --auto-submit",
+    "preview:android": "bunx eas-cli build --platform android --profile preview",
+    "preview:ios": "bunx eas-cli build --platform ios --profile preview --auto-submit",
+    "prod": "bunx eas-cli build --platform all --profile production --auto-submit",
+    "prod:android": "bunx eas-cli build --platform android --profile production",
+    "prod:ios": "bunx eas-cli build --platform ios --profile production --auto-submit",
+    "update": "bunx eas-cli update --channel production --environment production"
+  },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^5.2.14",
+    "@react-native-community/datetimepicker": "9.1.0",
+    "@react-native-community/slider": "5.2.0",
     "expo": "~57.0.26",
     "expo-constants": "~57.0.20",
     "expo-dev-client": "~57.0.19",
@@ -24,36 +50,24 @@
     "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
+    "react-native-svg": "15.15.4",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
     "@eslint/css": "^1.3.0",
     "@eslint/json": "^2.0.0",
+    "@storybook/addon-ondevice-controls": "10.5.1",
+    "@storybook/react-native": "10.5.1",
     "@types/react": "~19.2.2",
     "eslint": "^9",
     "eslint-config-expo": "~57.0.2",
     "knip": "^6.38.0",
+    "storybook": "^10.6.1",
     "typescript": "~6.0.3"
   },
-  "scripts": {
-    "pull": "bunx eas-cli env:pull --environment development --path .env.local",
-    "pull:preview": "bunx eas-cli env:pull --environment preview --path .env.local",
-    "android": "expo run:android --device --no-bundler",
-    "ios": "expo run:ios --device --no-bundler",
-    "web": "expo start --web",
-    "start": "NODE_OPTIONS=--dns-result-order=ipv4first expo start --dev-client --localhost",
-    "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc --noEmit",
-    "knip": "knip",
-    "staticchecks": "bun run lint && bun run typecheck && bun run knip",
-    "preview": "bunx eas-cli build --platform all --profile preview --auto-submit",
-    "preview:android": "bunx eas-cli build --platform android --profile preview",
-    "preview:ios": "bunx eas-cli build --platform ios --profile preview --auto-submit",
-    "prod": "bunx eas-cli build --platform all --profile production --auto-submit",
-    "prod:android": "bunx eas-cli build --platform android --profile production",
-    "prod:ios": "bunx eas-cli build --platform ios --profile production --auto-submit",
-    "update": "bunx eas-cli update --channel production --environment production"
-  },
-  "private": true
+  "private": true,
+  "overrides": {
+    "@storybook/react-native-ui": "10.5.1"
+  }
 }

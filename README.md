@@ -26,9 +26,13 @@ changes require regenerating the native project; this replaces the generated dir
 | `bun run web`                                | Start the web app                                                     |
 | `bun run start`                              | Start Metro for development builds on localhost                       |
 | `bun run lint`                               | ESLint for JS/TS, JSON and CSS; zero warnings allowed                 |
-| `bun run typecheck`                          | TypeScript checks                                                     |
+| `bun run typecheck`                          | Regenerate the story registry and run TypeScript checks                |
 | `bun run knip`                               | Detect unused files, exports and dependencies                         |
 | `bun run staticchecks`                       | Run lint, typecheck and Knip                                          |
+| `bun run storybook`                          | Start on-device Storybook instead of the app                           |
+| `bun run storybook:android`                  | Start Storybook and open the Android development build                 |
+| `bun run storybook:ios`                      | Start Storybook and open the iOS development build                     |
+| `bun run storybook-generate`                 | Regenerate the story registry (automatic before each static check)     |
 | `bun run preview`                            | Build both platforms with the preview profile and submit to stores    |
 | `bun run preview:android`                    | Build Android with the preview profile without submitting             |
 | `bun run preview:ios`                        | Build iOS with the preview profile and submit to TestFlight           |
@@ -38,6 +42,28 @@ changes require regenerating the native project; this replaces the generated dir
 | `bun run update --message "Fix description"` | Publish a production OTA update                                       |
 
 No test runner is configured yet, so CI only runs the existing static checks.
+
+## Storybook
+
+Build the development client once with `bun run ios` or `bun run android` after
+installing the Storybook native dependencies, then run `bun run storybook`.
+Stop the existing Metro server first. Stop Storybook and run `bun run start --clear`
+to return to the app.
+
+Stories live alongside components as `src/**/*.stories.tsx`; shared configuration
+and decorators live in `.rnstorybook/`. The examples cover `ThemedText` and `HintRow`,
+with editable props and the app's system-driven light/dark theme.
+Metro generates `storybook.requires.ts` automatically; it is not committed.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `STORYBOOK_ENABLED` | Unset (disabled) | `true` replaces the app entry point with Storybook; set by the Storybook scripts |
+
+Keep this variable unset for builds and OTA updates. Normal app bundles keep
+Expo Router and exclude Storybook. This on-device setup has no static HTML build,
+Chromatic, or DOM accessibility addons.
+The native Storybook packages and UI are pinned to 10.5.1 to retain Expo 57's
+supported `react-native-safe-area-context` version (5.7).
 
 ## CI/CD
 

@@ -20,6 +20,7 @@ expo-env.d.ts
 
 # Metro
 .metro-health-check*
+.rnstorybook/storybook.requires.ts
 
 # debug
 npm-debug.*
