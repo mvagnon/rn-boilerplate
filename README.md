@@ -1,56 +1,65 @@
-# Welcome to your Expo app 👋
+# React Native boilerplate
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo SDK 57, Expo Router, TypeScript and Bun 1.3.14.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Development
 
 ```bash
-npm run reset-project
+bun install --frozen-lockfile
+bun run ios # Or: bun run android. Creates a native development build.
+bun run start # Starts Metro separately.
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Routes live in `src/app/`. Native directories are generated and ignored by Git.
+Run `bun run ios` or `bun run android` again after adding a native dependency.
+Use `bunx expo prebuild --clean --platform ios` (or `android`) when app configuration
+changes require regenerating the native project; this replaces the generated directory.
 
-### Other setup steps
+## Scripts
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Command | Purpose |
+| --- | --- |
+| `bun run web` | Start the web app |
+| `bun run lint` | ESLint, zero warnings allowed |
+| `bun run typecheck` | TypeScript checks |
+| `bun run staticchecks` | Run lint and typecheck |
+| `bun run pull` / `pull:preview` | Pull EAS variables into `.env.local` |
+| `bun run preview` / `prod` | Build both platforms and submit to stores |
+| `bun run preview:android` / `prod:android` | Build Android without submitting |
+| `bun run preview:ios` / `prod:ios` | Build iOS and submit to TestFlight |
+| `bun run update --message "Fix description"` | Publish a production OTA update |
+| `bun run reset-project` | Replace the starter screens with a blank app |
 
-## Learn more
+No test runner is configured yet, so CI only runs the existing static checks.
 
-To learn more about developing your project with Expo, look at the following resources:
+## CI/CD
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **CI**: pull requests, pushes to `main`, and manual runs execute static checks and an OSV vulnerability scan.
+- **Release**: pushes to `main` maintain a release PR using Conventional Commits (`feat:`, `fix:`, `feat!:`). Merging it creates a GitHub release and updates `package.json`, `app.json`, and the changelog.
+- **Preview**: non-draft release PRs labeled `autorelease: pending` build and submit store candidates using the EAS `preview` environment/channel.
+- **Production**: a new release builds and submits the exact released commit using the EAS `production` environment/channel. Android submissions target the internal track; iOS submissions go to TestFlight, not directly to public release.
 
-## Join the community
+Both deployment jobs run static checks before submitting builds. They only queue
+EAS jobs (`--no-wait`); monitor the actual build and submission results on Expo.
+Deployment stays disabled until the repository variable `EAS_ENABLED` is `true`.
 
-Join our community of developers creating universal apps.
+| Setting | Location | Purpose |
+| --- | --- | --- |
+| `EAS_ENABLED` | GitHub repository Actions variable | Opt in to preview/production deployments |
+| `EXPO_TOKEN` | GitHub Actions secret | Authenticate EAS builds and submissions |
+| `RELEASE_PLEASE_TOKEN` | GitHub Actions secret | Let release PRs trigger CI and previews |
+| App environment variables | EAS environments | Pull locally with `pull` / `pull:preview`; never commit secrets |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Enable deployments for your app
+
+1. Customize the app name, slug, scheme, `ios.bundleIdentifier`, and `android.package` in `app.json`.
+2. Run `bunx eas-cli login`, `bunx eas-cli init`, then `bunx eas-cli update:configure`. These link your own project and configure `extra.eas.projectId`, `updates.url`, and `runtimeVersion`; never reuse another app's IDs. With the `appVersion` runtime policy, bump the app version and rebuild whenever native dependencies or configuration change.
+3. Create the app records in App Store Connect and Google Play. Add your app's `submit.production.ios.ascAppId` to `eas.json` and configure submission credentials in EAS. Google Play requires a first manual upload before API submissions.
+4. Complete an interactive build and submission for each platform to provision credentials before enabling non-interactive CI.
+5. Create GitHub environments `preview` and `production`; configure required reviewers for production if desired. Add an `EXPO_TOKEN` secret, and create the corresponding EAS environments/variables.
+6. Allow GitHub Actions to create pull requests in repository settings. Add `RELEASE_PLEASE_TOKEN` with repository contents, issues, and pull-request write permissions so release PR events trigger CI and preview workflows. Without it, release-please uses `GITHUB_TOKEN`, which does not trigger those workflows automatically.
+7. Set the **repository** Actions variable `EAS_ENABLED` to `true` only after setup is complete.
+
+Build profiles use remote build numbers with automatic increments. Preview uses
+store distribution (TestFlight / Play internal track), not an installable APK.
+No cloud project, build, submission, or OTA update is created by this template setup.
