@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "packageManager": "bun@1.3.14",
   "scripts": {
+    "api:sync": "orval",
     "pull": "bunx eas-cli env:pull --environment development --path .env.local",
     "pull:preview": "bunx eas-cli env:pull --environment preview --path .env.local",
     "android": "expo run:android --device --no-bundler",
@@ -17,7 +18,8 @@
     "lint": "bun run storybook-generate && eslint . --max-warnings 0",
     "typecheck": "bun run storybook-generate && tsc --noEmit",
     "knip": "bun run storybook-generate && knip",
-    "staticchecks": "bun run lint && bun run typecheck && bun run knip",
+    "test": "vitest run",
+    "staticchecks": "bun run lint && bun run typecheck && bun run knip && bun run test",
     "preview": "bunx eas-cli build --platform all --profile preview --auto-submit",
     "preview:android": "bunx eas-cli build --platform android --profile preview",
     "preview:ios": "bunx eas-cli build --platform ios --profile preview --auto-submit",
@@ -59,12 +61,16 @@
     "@eslint/json": "^2.0.0",
     "@storybook/addon-ondevice-controls": "10.5.1",
     "@storybook/react-native": "10.5.1",
+    "@types/node": "^24",
     "@types/react": "~19.2.2",
     "eslint": "^9",
     "eslint-config-expo": "~57.0.2",
     "knip": "^6.38.0",
+    "orval": "^8.40.0",
     "storybook": "^10.6.1",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
   },
   "private": true,
   "overrides": {

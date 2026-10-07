@@ -19,20 +19,22 @@ changes require regenerating the native project; this replaces the generated dir
 
 | Command                                      | Purpose                                                               |
 | -------------------------------------------- | --------------------------------------------------------------------- |
+| `bun run api:sync`                           | Generate the typed fetch client and models from OpenAPI                |
 | `bun run pull`                               | Pull development EAS variables into `.env.local`                      |
 | `bun run pull:preview`                       | Pull preview EAS variables into `.env.local`                          |
 | `bun run android`                            | Build and run on a selected Android device; Metro starts separately   |
 | `bun run ios`                                | Build and run on a selected iOS device; Metro starts separately       |
 | `bun run web`                                | Start the web app                                                     |
 | `bun run start`                              | Start Metro for development builds on localhost                       |
-| `bun run lint`                               | ESLint for JS/TS, JSON and CSS; zero warnings allowed                 |
-| `bun run typecheck`                          | Regenerate the story registry and run TypeScript checks                |
-| `bun run knip`                               | Detect unused files, exports and dependencies                         |
-| `bun run staticchecks`                       | Run lint, typecheck and Knip                                          |
 | `bun run storybook`                          | Start on-device Storybook instead of the app                           |
 | `bun run storybook:android`                  | Start Storybook and open the Android development build                 |
 | `bun run storybook:ios`                      | Start Storybook and open the iOS development build                     |
 | `bun run storybook-generate`                 | Regenerate the story registry (automatic before each static check)     |
+| `bun run lint`                               | ESLint for JS/TS, JSON and CSS; zero warnings allowed                 |
+| `bun run typecheck`                          | Regenerate the story registry and run TypeScript checks                |
+| `bun run knip`                               | Detect unused files, exports and dependencies                         |
+| `bun run test`                               | Run Vitest unit tests                                                 |
+| `bun run staticchecks`                       | Run lint, typecheck, Knip and tests                                    |
 | `bun run preview`                            | Build both platforms with the preview profile and submit to stores    |
 | `bun run preview:android`                    | Build Android with the preview profile without submitting             |
 | `bun run preview:ios`                        | Build iOS with the preview profile and submit to TestFlight           |
@@ -41,7 +43,30 @@ changes require regenerating the native project; this replaces the generated dir
 | `bun run prod:ios`                           | Build iOS with the production profile and submit to TestFlight        |
 | `bun run update --message "Fix description"` | Publish a production OTA update                                       |
 
-No test runner is configured yet, so CI only runs the existing static checks.
+## Unit tests
+
+Vitest runs pure TypeScript tests in `tests/**/*.test.ts`, with a Node environment
+and the project's TypeScript path aliases. It does not render React Native UI or
+load native modules. No tests exist yet; `passWithNoTests` allows this initial
+empty suite. Disable it after adding real tests. Tests run as part of `staticchecks`
+locally and in CI.
+
+## API generation
+
+Orval generates typed fetch functions and models in `src/api/generated/`.
+Run `bun run api:sync` with your backend available, then commit the generated files;
+do not edit them manually. HTTP error responses reject instead of returning success data.
+API generation is explicit, not part of CI's static checks.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `OPENAPI_URL` | `http://localhost:3000/openapi.json` | OpenAPI URL or file path used by `api:sync`; set in the shell or `.env.local` |
+| `EXPO_PUBLIC_API_URL` | None (required when calling the API) | Absolute API base URL, without a trailing slash; set in `.env.local` or EAS |
+
+The client reads `EXPO_PUBLIC_API_URL` through Expo's environment variable inlining.
+For a physical device, use a reachable host or your computer's LAN IP, not `localhost`.
+Public variables must not contain secrets. No backend schema or generated client
+is bundled with this template yet.
 
 ## Storybook
 
