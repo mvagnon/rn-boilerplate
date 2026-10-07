@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   release:
+    if: ${{ vars.EAS_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,7 +28,6 @@ jobs:
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
         with:
           target-branch: main
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
 
   production:
     needs: release

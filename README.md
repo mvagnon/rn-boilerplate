@@ -41,13 +41,13 @@ No test runner is configured yet, so CI only runs the existing static checks.
 
 Both deployment jobs run static checks before submitting builds. They only queue
 EAS jobs (`--no-wait`); monitor the actual build and submission results on Expo.
-Deployment stays disabled until the repository variable `EAS_ENABLED` is `true`.
+Release-please, preview, and production jobs are skipped unless the repository
+variable `EAS_ENABLED` is `true`. CI stays active.
 
 | Setting | Location | Purpose |
 | --- | --- | --- |
-| `EAS_ENABLED` | GitHub repository Actions variable | Opt in to preview/production deployments |
+| `EAS_ENABLED` | GitHub repository Actions variable | Opt in to releases and preview/production deployments |
 | `EXPO_TOKEN` | GitHub Actions secret | Authenticate EAS builds and submissions |
-| `RELEASE_PLEASE_TOKEN` | GitHub Actions secret | Let release PRs trigger CI and previews |
 | App environment variables | EAS environments | Pull locally with `pull` / `pull:preview`; never commit secrets |
 
 ### Enable deployments for your app
@@ -57,7 +57,7 @@ Deployment stays disabled until the repository variable `EAS_ENABLED` is `true`.
 3. Create the app records in App Store Connect and Google Play. Add your app's `submit.production.ios.ascAppId` to `eas.json` and configure submission credentials in EAS. Google Play requires a first manual upload before API submissions.
 4. Complete an interactive build and submission for each platform to provision credentials before enabling non-interactive CI.
 5. Create GitHub environments `preview` and `production`; configure required reviewers for production if desired. Add an `EXPO_TOKEN` secret, and create the corresponding EAS environments/variables.
-6. Allow GitHub Actions to create pull requests in repository settings. Add `RELEASE_PLEASE_TOKEN` with repository contents, issues, and pull-request write permissions so release PR events trigger CI and preview workflows. Without it, release-please uses `GITHUB_TOKEN`, which does not trigger those workflows automatically.
+6. Allow GitHub Actions to create pull requests in repository settings. Release-please uses the built-in `GITHUB_TOKEN`; PR events it creates do not automatically trigger CI or preview workflows.
 7. Set the **repository** Actions variable `EAS_ENABLED` to `true` only after setup is complete.
 
 Build profiles use remote build numbers with automatic increments. Preview uses
