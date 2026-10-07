@@ -17,17 +17,25 @@ changes require regenerating the native project; this replaces the generated dir
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `bun run web` | Start the web app |
-| `bun run lint` | ESLint, zero warnings allowed |
-| `bun run typecheck` | TypeScript checks |
-| `bun run staticchecks` | Run lint and typecheck |
-| `bun run pull` / `pull:preview` | Pull EAS variables into `.env.local` |
-| `bun run preview` / `prod` | Build both platforms and submit to stores |
-| `bun run preview:android` / `prod:android` | Build Android without submitting |
-| `bun run preview:ios` / `prod:ios` | Build iOS and submit to TestFlight |
-| `bun run update --message "Fix description"` | Publish a production OTA update |
+| Command                                      | Purpose                                                               |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| `bun run pull`                               | Pull development EAS variables into `.env.local`                      |
+| `bun run pull:preview`                       | Pull preview EAS variables into `.env.local`                          |
+| `bun run android`                            | Build and run on a selected Android device; Metro starts separately   |
+| `bun run ios`                                | Build and run on a selected iOS device; Metro starts separately       |
+| `bun run web`                                | Start the web app                                                     |
+| `bun run start`                              | Start Metro for development builds on localhost                       |
+| `bun run lint`                               | ESLint for JS/TS, JSON and CSS; zero warnings allowed                 |
+| `bun run typecheck`                          | TypeScript checks                                                     |
+| `bun run knip`                               | Detect unused files, exports and dependencies                         |
+| `bun run staticchecks`                       | Run lint, typecheck and Knip                                          |
+| `bun run preview`                            | Build both platforms with the preview profile and submit to stores    |
+| `bun run preview:android`                    | Build Android with the preview profile without submitting             |
+| `bun run preview:ios`                        | Build iOS with the preview profile and submit to TestFlight           |
+| `bun run prod`                               | Build both platforms with the production profile and submit to stores |
+| `bun run prod:android`                       | Build Android with the production profile without submitting          |
+| `bun run prod:ios`                           | Build iOS with the production profile and submit to TestFlight        |
+| `bun run update --message "Fix description"` | Publish a production OTA update                                       |
 
 No test runner is configured yet, so CI only runs the existing static checks.
 
@@ -43,11 +51,11 @@ EAS jobs (`--no-wait`); monitor the actual build and submission results on Expo.
 Release-please, preview, and production jobs are skipped unless the repository
 variable `EAS_ENABLED` is `true`. CI stays active.
 
-| Setting | Location | Purpose |
-| --- | --- | --- |
-| `EAS_ENABLED` | GitHub repository Actions variable | Opt in to releases and preview/production deployments |
-| `EXPO_TOKEN` | GitHub Actions secret | Authenticate EAS builds and submissions |
-| App environment variables | EAS environments | Pull locally with `pull` / `pull:preview`; never commit secrets |
+| Setting                   | Location                           | Purpose                                                         |
+| ------------------------- | ---------------------------------- | --------------------------------------------------------------- |
+| `EAS_ENABLED`             | GitHub repository Actions variable | Opt in to releases and preview/production deployments           |
+| `EXPO_TOKEN`              | GitHub Actions secret              | Authenticate EAS builds and submissions                         |
+| App environment variables | EAS environments                   | Pull locally with `pull` / `pull:preview`; never commit secrets |
 
 ### Enable deployments for your app
 
