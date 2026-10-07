@@ -61,7 +61,7 @@ For physical devices, use a reachable API host or your computer's LAN IP, not `l
 
 | GitHub setting | Location                    | Purpose                                              | Default          |
 | -------------- | --------------------------- | ---------------------------------------------------- | ---------------- |
-| `EAS_ENABLED`  | Repository Actions variable | Set to `true` to enable releases and EAS deployments | Unset (disabled) |
+| `RELEASE_ENABLED` | Repository Actions variable | Set to `true` to enable releases and EAS deployments | Unset (disabled) |
 | `RELEASE_REVIEWER` | Repository Actions variable | GitHub login to request a review from on release PR creation or update | Unset (disabled) |
 | `EXPO_TOKEN`   | Actions secret              | Authenticate EAS builds and submissions              | None             |
 
@@ -70,7 +70,7 @@ For physical devices, use a reachable API host or your computer's LAN IP, not `l
 - Set `RELEASE_REVIEWER` to your GitHub login (e.g. `mvagnon`) to request or re-request a review using the existing `GITHUB_TOKEN`. Requiring approval before merge is a separate branch protection setting.
 - **Preview**: non-draft, same-repository release PRs labeled `autorelease: pending` build and submit store candidates.
 - **Production**: new releases build and submit the released commit. Android targets Play's internal track; iOS targets TestFlight, not public release.
-- Release-please, preview and production are disabled unless `EAS_ENABLED=true`. Deployment jobs check the code, then queue EAS jobs with `--no-wait`; monitor completion on Expo. Build numbers auto-increment remotely; preview is store distribution, not an APK.
+- Release-please, preview and production are disabled unless `RELEASE_ENABLED=true`. Deployment jobs check the code, then queue EAS jobs with `--no-wait`; monitor completion on Expo. Build numbers auto-increment remotely; preview is store distribution, not an APK.
 
 ### Enable deployments for your app
 
@@ -80,7 +80,7 @@ For physical devices, use a reachable API host or your computer's LAN IP, not `l
 4. Complete an interactive build and submission for each platform before enabling non-interactive CI.
 5. Create GitHub environments `preview` and `production`, the `EXPO_TOKEN` secret, and matching EAS environments/variables. Configure production reviewers if needed.
 6. Allow GitHub Actions to create PRs. Release-please uses `GITHUB_TOKEN`; PR events it creates do not automatically trigger CI or preview.
-7. Set the **repository** Actions variable `EAS_ENABLED` to `true` only after setup. Template installation does not create a cloud project or deploy the app.
+7. Set the **repository** Actions variable `RELEASE_ENABLED` to `true` only after setup. Template installation does not create a cloud project or deploy the app.
 
 ## Setup for an existing project
 
