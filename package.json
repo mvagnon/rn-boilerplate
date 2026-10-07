@@ -42,7 +42,6 @@
     "start": "NODE_OPTIONS=--dns-result-order=ipv4first expo start --dev-client --localhost",
     "android": "expo run:android --device --no-bundler",
     "ios": "expo run:ios --device --no-bundler",
-    "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",

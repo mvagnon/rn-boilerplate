@@ -28,7 +28,6 @@ changes require regenerating the native project; this replaces the generated dir
 | `bun run preview:android` / `prod:android` | Build Android without submitting |
 | `bun run preview:ios` / `prod:ios` | Build iOS and submit to TestFlight |
 | `bun run update --message "Fix description"` | Publish a production OTA update |
-| `bun run reset-project` | Replace the starter screens with a blank app |
 
 No test runner is configured yet, so CI only runs the existing static checks.
 
