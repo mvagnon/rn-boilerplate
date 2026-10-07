@@ -62,10 +62,12 @@ For physical devices, use a reachable API host or your computer's LAN IP, not `l
 | GitHub setting | Location                    | Purpose                                              | Default          |
 | -------------- | --------------------------- | ---------------------------------------------------- | ---------------- |
 | `EAS_ENABLED`  | Repository Actions variable | Set to `true` to enable releases and EAS deployments | Unset (disabled) |
+| `RELEASE_REVIEWER` | Repository Actions variable | GitHub login to request a review from on release PR creation or update | Unset (disabled) |
 | `EXPO_TOKEN`   | Actions secret              | Authenticate EAS builds and submissions              | None             |
 
 - **CI**: pull requests, pushes to `main` and manual runs execute `staticchecks` and an OSV vulnerability scan. CI stays active without EAS configuration.
 - **Release**: Conventional Commits maintain a release PR; merging it creates a GitHub release and updates app/package versions and the changelog.
+- Set `RELEASE_REVIEWER` to your GitHub login (e.g. `mvagnon`) to request or re-request a review using the existing `GITHUB_TOKEN`. Requiring approval before merge is a separate branch protection setting.
 - **Preview**: non-draft, same-repository release PRs labeled `autorelease: pending` build and submit store candidates.
 - **Production**: new releases build and submit the released commit. Android targets Play's internal track; iOS targets TestFlight, not public release.
 - Release-please, preview and production are disabled unless `EAS_ENABLED=true`. Deployment jobs check the code, then queue EAS jobs with `--no-wait`; monitor completion on Expo. Build numbers auto-increment remotely; preview is store distribution, not an APK.
