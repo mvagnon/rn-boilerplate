@@ -7,7 +7,7 @@
     "api:sync": "orval",
     "pull": "bunx eas-cli env:pull --environment development --path .env.local",
     "pull:preview": "bunx eas-cli env:pull --environment preview --path .env.local",
-    "prebuild": "expo prebuild",
+    "prebuild": "expo prebuild --clean",
     "ios": "test -d ios && expo run:ios --device --no-bundler --no-install",
     "android": "expo run:android --device --no-bundler",
     "web": "expo start --web",
