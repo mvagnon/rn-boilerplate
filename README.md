@@ -13,8 +13,9 @@ Expo SDK 57, Expo Router, TypeScript and Bun 1.3.14. Tooling and CI use Node 24.
 | `bun run api:sync`                           | Regenerate the typed fetch client from OpenAPI                        |
 | `bun run pull`                               | Pull development EAS variables into `.env.local`                      |
 | `bun run pull:preview`                       | Pull preview EAS variables into `.env.local`                          |
-| `bun run android`                            | Build and run on a selected Android device; Metro starts separately   |
+| `bun run prebuild`                           | Generate Android and iOS projects                                     |
 | `bun run ios`                                | Build and run on a selected iOS device; Metro starts separately       |
+| `bun run android`                            | Build and run on a selected Android device; Metro starts separately   |
 | `bun run web`                                | Start the web app                                                     |
 | `bun run start`                              | Start Metro for development builds on localhost                       |
 | `bun run storybook`                          | Start on-device Storybook instead of the app                          |
@@ -59,11 +60,11 @@ For physical devices, use a reachable API host or your computer's LAN IP, not `l
 
 ## CI/CD
 
-| GitHub setting | Location                    | Purpose                                              | Default          |
-| -------------- | --------------------------- | ---------------------------------------------------- | ---------------- |
-| `RELEASE_ENABLED` | Repository Actions variable | Set to `true` to enable releases and EAS deployments | Unset (disabled) |
+| GitHub setting     | Location                    | Purpose                                                                | Default          |
+| ------------------ | --------------------------- | ---------------------------------------------------------------------- | ---------------- |
+| `RELEASE_ENABLED`  | Repository Actions variable | Set to `true` to enable releases and EAS deployments                   | Unset (disabled) |
 | `RELEASE_REVIEWER` | Repository Actions variable | GitHub login to request a review from on release PR creation or update | Unset (disabled) |
-| `EXPO_TOKEN`   | Actions secret              | Authenticate EAS builds and submissions              | None             |
+| `EXPO_TOKEN`       | Actions secret              | Authenticate EAS builds and submissions                                | None             |
 
 - **CI**: pull requests, pushes to `main` and manual runs execute `staticchecks` and an OSV vulnerability scan. CI stays active without EAS configuration.
 - **Release**: Conventional Commits maintain a release PR; merging it creates a GitHub release and updates app/package versions and the changelog.
