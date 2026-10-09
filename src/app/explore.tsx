@@ -10,8 +10,10 @@ import { Collapsible } from '@/components/ui/collapsible';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useStartupReady } from '@/hooks/use-startup-ready';
 
 export default function TabTwoScreen() {
+  const onStartupReady = useStartupReady();
   const safeAreaInsets = useSafeAreaInsets();
   const insets = {
     ...safeAreaInsets,
@@ -34,6 +36,7 @@ export default function TabTwoScreen() {
 
   return (
     <ScrollView
+      onLayout={onStartupReady}
       style={[styles.scrollView, { backgroundColor: theme.background }]}
       contentInset={insets}
       contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>

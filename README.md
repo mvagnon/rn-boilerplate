@@ -38,6 +38,18 @@ Expo SDK 57, Expo Router, TypeScript and Bun 1.3.14. Tooling and CI use Node 24.
 Build a development client with `ios` or `android`, then start Metro with `start`. Local native builds require Xcode or Android tooling.
 Routes live in `src/app/`; native directories are generated and ignored by Git. After native dependency or app config changes, regenerate with `bunx expo prebuild --clean --platform ios` (or `android`), then rebuild; this replaces the generated directory.
 
+## Startup splash
+
+BootSplash requires a development build, not Expo Go. The native splash hands off to an overlay that waits for the focused screen's first layout; text and spinner fade together.
+
+| Configuration | Location |
+| ------------- | -------- |
+| App name, logo path and logo width | `app.json` |
+| Light/dark backgrounds, text and primary color | `src/constants/colors.json` |
+| Screen readiness | Call `useStartupReady()` in each entry screen and pass its callback to `onLayout`; for async screens, call it after initial loading finishes |
+
+Regenerate and rebuild after changing the logo, backgrounds or native dependencies. Text and spinner changes only need a JS reload.
+
 ## Env variables
 
 | Variable              | Purpose                                                             | Default                              |
@@ -109,4 +121,5 @@ Agent instructions:
 | Quality scripts | `package.json`, `eslint.config.js`, `knip.json`, `tsconfig.json`, `vitest.config.mts`                                                                                      |
 | API generation  | `orval.config.ts`, `package.json`, `eslint.config.js`                                                                                                                      |
 | Storybook       | `.rnstorybook/` (excluding generated registry), `metro.config.js`, `package.json`, `eslint.config.js`, `knip.json`, `.gitignore`                                           |
+| Startup splash  | `plugins/with-native-bootsplash.js`, `assets/bootsplash/`, `assets/images/splash-icon.png`, `src/components/animated-bootsplash*`, `src/hooks/use-startup-ready.ts`, `src/constants/colors.json`, `app.json`, `package.json`, `knip.json` |
 | EAS deployments | `.github/workflows/preview.yml`, `.github/workflows/production.yml`, `eas.json`, `app.json`, `release-please-config.json`, `.release-please-manifest.json`, `package.json` |

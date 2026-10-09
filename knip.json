@@ -1,5 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [".rnstorybook/storybook.requires.ts"],
+  "entry": [".rnstorybook/storybook.requires.ts", "plugins/*.js"],
   "ignoreDependencies": ["react-native-svg", "expo-mcp"]
 }
