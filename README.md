@@ -3,7 +3,9 @@
 
 # React Native Boilerplate
 
-Expo SDK 57, Expo Router, TypeScript and Bun 1.3.14. Tooling and CI use Node 24.
+## More technical info
+
+See [AGENTS.md](./AGENTS.md) for architecture, roadmap, API generation and Storybook guidelines, for both contributors and agents.
 
 ## Commands
 
