@@ -1,41 +1,23 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+# Project Instructions
 
-## Expo has changed — do not trust your training data
+## Architecture
 
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
+Expo/React Native application with Expo Router. Routes and layouts live in `src/app/`; keep components, hooks and constants outside it. Shared Storybook configuration lives in `.rnstorybook/`, generated API code in `src/api/generated/`, and Node-based unit tests in `tests/`.
 
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
+## Roadmap
 
-## Commands
+Project management URL: [GitHub](https://github.com/mvagnon/react-boilerplate/issues)
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+Consult it with the dedicated tool (`gh` CLI or appropriate MCP, etc.) to understand the project and make decisions that account for upcoming changes.
 
-```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
-```
+## Orval
 
-Run lint and typecheck before declaring any task done.
+Generates typed fetch functions and API types in `src/api/generated/` from the backend's OpenAPI endpoint. Set `OPENAPI_URL` and run `bun run api:sync`; reuse the generated client and never edit it manually. Set `EXPO_PUBLIC_API_URL` to an API host reachable from the device.
 
-## Navigation & Routing
+## Storybook
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
+On-device UI development and documentation workshop. Keep `*.stories.tsx` next to components under `src/`, with fixed data and no live backend. Run `bun run storybook` with a native development build; configuration lives in `.rnstorybook/`.
 
-## Building with EAS
+Every component creation, update or deletion must include the corresponding story creation, update or deletion.
 
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
-
-## Rules
-
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+Consult [React Native Storybook documentation on Context7](https://context7.com/storybookjs/react-native) (`/storybookjs/react-native`) for well-structured, testable stories. Use typed CSF (`satisfies Meta`, `StoryObj` from `@storybook/react-native`) and cover all applicable variants and states through `args` and on-device controls. Keep interactions reproducible without assuming browser-only testing APIs.
