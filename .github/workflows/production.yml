@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   release:
+    name: Release management
     if: ${{ vars.RELEASE_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     permissions:
@@ -39,6 +40,7 @@ jobs:
         run: gh pr edit "$PR_NUMBER" --add-reviewer "$RELEASE_REVIEWER"
 
   production:
+    name: Production build
     needs: release
     if: ${{ needs.release.outputs.release_created == 'true' && vars.RELEASE_ENABLED == 'true' }}
     runs-on: ubuntu-latest
@@ -63,7 +65,7 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Static checks
+      - name: Run quality checks
         run: bun run staticchecks
 
       - name: Set up EAS

@@ -1,4 +1,4 @@
-name: CI (mobile)
+name: CI
 
 on:
   pull_request:
@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   checks:
+    name: Quality checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,17 +37,39 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Static checks
+      - name: Run quality checks
         run: bun run staticchecks
 
-  osv-scan:
+  security:
+    name: Dependency security
+    runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: read
-      security-events: write
-    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@a345acffa64b0eaede81a3d9aae6141214d9c8fc
-    with:
-      upload-sarif: false
-      scan-args: |
-        --recursive
-        ./
+    env:
+      TRIVY_INCLUDE_DEV_DEPS: 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - name: Report all vulnerabilities
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: fs
+          scanners: vuln
+          format: json
+          output: ${{ runner.temp }}/trivy-results.json
+          exit-code: '0'
+
+      - name: Check fixable vulnerabilities
+        run: trivy fs --cache-dir .cache/trivy --scanners vuln --ignore-unfixed --exit-code 1 .
+
+      - name: Upload security reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: Dependency security report
+          path: ${{ runner.temp }}/trivy-results.json
+          retention-days: 5
+          if-no-files-found: error
