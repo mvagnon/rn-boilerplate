@@ -51,6 +51,6 @@ Generates typed fetch functions and API types in `src/api/generated/` from the b
 
 On-device UI development and documentation workshop. Keep `*.stories.tsx` next to components under `src/`, with fixed data and no live backend. Run `bun run storybook` with a native development build; configuration lives in `.rnstorybook/`.
 
-Every component creation, update or deletion must include the corresponding story creation, update or deletion.
+Only presentational components require corresponding story creation, updates or deletion when they change. Non-visual components and highly specialized, niche components do not require stories.
 
 Consult [React Native Storybook documentation on Context7](https://context7.com/storybookjs/react-native) (`/storybookjs/react-native`) for well-structured, testable stories. Use typed CSF (`satisfies Meta`, `StoryObj` from `@storybook/react-native`) and cover all applicable variants and states through `args` and on-device controls. Keep interactions reproducible without assuming browser-only testing APIs.
