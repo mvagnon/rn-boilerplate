@@ -49,10 +49,19 @@ Generates typed fetch functions and API types in `src/api/generated/` from the b
 
 ## Storybook
 
-On-device UI development and documentation workshop. Keep `*.stories.tsx` next to components under `src/`, with fixed data and no live backend. Run `bun run storybook` with a native development build; configuration lives in `.rnstorybook/`.
+Storybook is an interactive UI workshop, not an exhaustive component inventory.
 
-Stories are **mandatory for every purely presentational leaf component** at the end of the component tree: components that receive their data and callbacks through props, without fetching data, accessing global state or contexts, or orchestrating business logic. Create their stories when adding them, keep those stories up to date whenever their props, variants, states or visual behavior change, and delete their stories when removing them. Specialized or niche leaf components are not exempt.
+Create stories only for components whose appearance or behavior benefits from standalone exploration: controls, cards, dialogs, navigation, and meaningful UI compositions. Being a leaf component is neither required nor sufficient.
 
-Functional components responsible for data fetching, state management, business logic or orchestration (such as containers, providers and route components) do not require stories. “Functional” here refers to responsibility, not React function-component syntax.
+Skip implementation details such as providers, technical wrappers, and transition primitives; demonstrate them through consuming components instead.
 
-Consult [React Native Storybook documentation on Context7](https://context7.com/storybookjs/react-native) (`/storybookjs/react-native`) for well-structured, testable stories. Use typed CSF (`satisfies Meta`, `StoryObj` from `@storybook/react-native`) and cover all applicable variants and states through `args` and on-device controls. Keep interactions reproducible without assuming browser-only testing APIs.
+- Provide a customizable playground using `args` and on-device Controls for meaningful public inputs: content, variants, sizes, states, and behavior.
+- Configure `argTypes` when needed for clear, usable controls.
+- Use realistic, deterministic data without a live backend.
+- Cover distinct, useful states—not every possible prop combination.
+- Keep interactions functional and reproducible without assuming browser-only testing APIs.
+- Colocate `*.stories.tsx` with components under `src/`, use typed CSF (`satisfies Meta`, `StoryObj` from `@storybook/react-native`), and keep stories aligned with component changes and removals.
+- Do not change production architecture just to accommodate stories.
+
+Consult [React Native Storybook documentation on Context7](https://context7.com/storybookjs/react-native) (`/storybookjs/react-native`).
+Run `bun run storybook` with a native development build; configuration lives in `.rnstorybook/`.
