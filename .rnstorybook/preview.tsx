@@ -1,14 +1,12 @@
 import type { Preview } from '@storybook/react-native';
-
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { View } from 'react-native';
 
 const preview: Preview = {
   decorators: [
     (Story) => (
-      <ThemedView style={{ flex: 1, padding: Spacing.three }}>
+      <View style={{ flex: 1, padding: 16 }}>
         <Story />
-      </ThemedView>
+      </View>
     ),
   ],
   parameters: {

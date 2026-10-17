@@ -5,17 +5,11 @@ const path = require('node:path');
 const Colors = require('../src/constants/colors.json');
 
 /**
- * Keeps the generated native splash and JS overlay in sync with the app's theme.
+ * Adds a dark-mode background to the generated native splash.
  * @param {import('expo/config-plugins').ExportedConfigWithProps} config
  */
 async function writeAppearance(config) {
-  const { projectRoot, platformProjectRoot, projectName, platform } = config.modRequest;
-  const manifestPath = path.join(projectRoot, 'assets/bootsplash/manifest.json');
-  const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
-  await fs.writeFile(manifestPath, `${JSON.stringify({
-    ...manifest,
-    darkBackground: Colors.dark.background,
-  }, null, 2)}\n`);
+  const { platformProjectRoot, projectName, platform } = config.modRequest;
 
   if (platform === 'ios') {
     const colors = path.join(platformProjectRoot, projectName, 'Colors.xcassets');

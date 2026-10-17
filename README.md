@@ -1,11 +1,11 @@
 [![portfolio](https://img.shields.io/website?url=https%3A%2F%2Fmvagnon.dev&up_message=Visit&label=Portfolio&color=%23007fff)](https://mvagnon.dev)
-[![bymeacoffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/mvagnon)
+[![buymeacoffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/mvagnon)
 
 # React Native Boilerplate
 
-## More technical info
+## Reference
 
-See [AGENTS.md](./AGENTS.md) for architecture, roadmap, API generation and Storybook guidelines, for both contributors and agents.
+See [AGENTS.md](./AGENTS.md) for coding guidelines.
 
 ## Commands
 
@@ -38,18 +38,23 @@ For local development: install dependencies, run `prebuild`, build with `ios` or
 
 `api:sync` generates `src/api/generated/`; never edit generated files and run `staticchecks` after syncing. On physical devices, use a reachable host, not `localhost`. Never put secrets in `EXPO_PUBLIC_` variables.
 
+## App configuration
+
+| Setting                               | Location                                | Purpose                                                                              |
+| ------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------ |
+| App identity and native configuration | `app.json`                              | Set your name, identifiers, EAS project ID and update URL                            |
+| Build and submission profiles         | `eas.json`                              | Configure build environments and iOS `ascAppId`                                      |
+| Startup splash                        | `app.json`, `src/constants/colors.json` | Configure logo/colors; hide BootSplash from the entry screen's `onLayout` once ready |
+
 ## CI/CD
 
 CI runs `staticchecks` and a vulnerability scan. Optional releases use Conventional Commits and release PRs; preview builds release PR candidates, and production builds the released commit. Android submissions target Play's internal track; iOS targets TestFlight. Monitor queued builds on Expo.
 
-| Setting                               | Location                                | Purpose                                                                                       |
-| ------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `RELEASE_ENABLED`                     | Repository Actions variable             | Set to `true` only after EAS/store setup; disabled by default                                 |
-| `RELEASE_REVIEWER`                    | Repository Actions variable             | Optional GitHub login for release PR reviews                                                  |
-| `EXPO_TOKEN`                          | Actions secret                          | Authenticate EAS builds and submissions                                                       |
-| App identity and native configuration | `app.json`                              | Set your name, identifiers, EAS project ID and update URL                                     |
-| Build and submission profiles         | `eas.json`                              | Configure build environments and iOS `ascAppId`                                               |
-| Startup splash                        | `app.json`, `src/constants/colors.json` | Configure logo/colors; connect `useStartupReady()` to entry-screen `onLayout` (after loading) |
+| Setting            | Location                    | Purpose                                                       |
+| ------------------ | --------------------------- | ------------------------------------------------------------- |
+| `RELEASE_ENABLED`  | Repository Actions variable | Set to `true` only after EAS/store setup; disabled by default |
+| `RELEASE_REVIEWER` | Repository Actions variable | Optional GitHub login for release PR reviews                  |
+| `EXPO_TOKEN`       | Actions secret              | Authenticate EAS builds and submissions                       |
 
 Before setting `RELEASE_ENABLED=true`:
 
@@ -64,22 +69,25 @@ PRs created with `GITHUB_TOKEN` do not automatically trigger CI or preview. With
 Ask your agent:
 
 ```text
-Use `mvagnon/rn-boilerplate` as a reference to adopt CI, quality scripts, API generation and on-device Storybook in this Expo project.
-Follow its README's "Setup for an existing project" instructions using `gh`.
+Use `mvagnon/rn-boilerplate` as a reference to adopt boilerplate's conventions, structure, stack, CI/CD, quality scripts, etc.
+Follow its README's "Agent instructions" using `gh` CLI or GitHub MCP.
 ```
 
 Agent instructions:
 
-1. Use `gh` to read the boilerplate's README, `AGENTS.md` and requested files at the chosen ref; record its SHA. The target project's instructions take precedence.
-2. Merge only requested modules, adapting paths and commands without replacing screens, navigation or app identity. Check the target's Expo SDK docs; install compatible dependencies with `expo install` and update the lockfile without downgrades or SDK changes unless approved.
-3. Adapt Orval to the backend and a device-reachable API URL. Keep Storybook opt-in and preserve the production entry point; omit its integrations for quality-only adoption.
-4. Preserve EAS identifiers, signing and runtime policy; keep deployments disabled until the owner completes setup. Never trigger cloud builds, submissions or OTA updates without approval.
-5. Run affected checks and report changes, results and source SHA.
+1. Read the boilerplate at the requested ref (default: default branch) using `gh` or GitHub MCP; record its commit SHA. Read the target project too; its `AGENTS.md` and conventions take precedence.
+2. Present the available features grouped by the categories below. Explicitly ask what to apply and what to exclude in each category. Wait for the user's answer before making changes.
+3. Implement only the approved selection, adapting to the target project without duplicates. Use its package manager, update its lockfile, and never downgrade dependencies. Check its Expo SDK docs and use `expo install` for compatible native dependencies; do not change the SDK, screens, navigation or app identity unless approved.
+4. Run the affected checks and builds. Report the changes, results and source SHA.
 
-| Module          | Source files                                                                                                                                                               |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CI              | `.github/workflows/ci.yml`, `package.json`                                                                                                                                 |
-| Quality scripts | `package.json`, `eslint.config.js`, `knip.json`, `tsconfig.json`, `vitest.config.mts`                                                                                      |
-| API generation  | `orval.config.ts`, `package.json`, `eslint.config.js`                                                                                                                      |
-| Storybook       | `.rnstorybook/` (excluding generated registry), `metro.config.js`, `package.json`, `eslint.config.js`, `knip.json`, `.gitignore`                                           |
-| EAS deployments | `.github/workflows/preview.yml`, `.github/workflows/production.yml`, `eas.json`, `app.json`, `release-please-config.json`, `.release-please-manifest.json`, `package.json` |
+Keep Storybook opt-in and API hosts device-reachable. Preserve EAS identifiers, signing and runtime policy; keep deployments disabled until setup is complete. Never trigger cloud builds, submissions or OTA updates without approval.
+
+| Category             | Features                                                    |
+| -------------------- | ----------------------------------------------------------- |
+| Architecture         | Project structure and coding guidelines                     |
+| Dependencies & stack | React Native, Expo, Expo Router, TypeScript                 |
+| CI/CD                | GitHub Actions workflows                                    |
+| Code quality & tests | ESLint, Knip, Vitest, quality scripts                       |
+| API generation       | Orval client and types                                      |
+| Storybook            | On-device component stories and controls                    |
+| EAS deployments      | Build profiles, releases, store submissions and OTA updates |
