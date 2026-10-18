@@ -45,6 +45,9 @@ For local development: install dependencies, run `prebuild`, build with `ios` or
 | App identity and native configuration | `app.json`                              | Set your name, identifiers, EAS project ID and update URL                            |
 | Build and submission profiles         | `eas.json`                              | Configure build environments and iOS `ascAppId`                                      |
 | Startup splash                        | `app.json`, `src/constants/colors.json` | Configure logo/colors; hide BootSplash from the entry screen's `onLayout` once ready |
+| Android release optimization          | `app.json`, `plugins/with-android-r8.js` | R8 optimization, obfuscation and unused resource removal enabled by default          |
+
+Test Android release builds before publishing, especially after adding native libraries. Libraries using reflection may need targeted ProGuard keep rules supplied through an Expo config plugin; do not edit generated native files.
 
 ## CI/CD
 

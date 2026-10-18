@@ -27,7 +27,8 @@
           "logoWidth": 134
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "./plugins/with-android-r8"
     ],
     "experiments": {
       "typedRoutes": true,
