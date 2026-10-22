@@ -8,7 +8,7 @@
     "pull": "bunx eas-cli env:pull --environment development --path .env.local",
     "pull:preview": "bunx eas-cli env:pull --environment preview --path .env.local",
     "prebuild": "expo prebuild --clean",
-    "ios": "test -d ios && expo run:ios --device --no-bundler --no-install",
+    "ios": "expo run:ios --device --no-bundler",
     "android": "expo run:android --device --no-bundler",
     "web": "expo start --web",
     "start": "EXPO_UNSTABLE_MCP_SERVER=1 NODE_OPTIONS=--dns-result-order=ipv4first expo start --dev-client --localhost",
