@@ -17,7 +17,7 @@ permissions:
 jobs:
   checks:
     name: Quality checks
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repository
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -42,7 +42,7 @@ jobs:
 
   security:
     name: Dependency security
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:
       contents: read
     env:

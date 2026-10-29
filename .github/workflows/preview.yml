@@ -21,7 +21,7 @@ jobs:
       !github.event.pull_request.draft &&
       contains(github.event.pull_request.labels.*.name, 'autorelease: pending') &&
       (github.event.action != 'labeled' || github.event.label.name == 'autorelease: pending')
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     environment: preview
     steps:
       - name: Checkout release PR candidate
