@@ -4,6 +4,16 @@
 
 This project is an Expo/React Native application boilerplate.
 
+## Backward Compatibility
+
+- When presenting an implementation plan, flag any changes that cannot preserve backward compatibility.
+- Always preserve backend backward compatibility by default: APIs, persisted data, and database migrations must remain compatible with older supported clients.
+- Prefer additive changes over multiple API versions. When renaming a field, keep the old field and accept legacy inputs, with one source of truth.
+- Database migrations must also support the previous backend version.
+- Mark deprecated elements using exactly: `// deprecated on YYYY-MM-DD: <replacement and compatibility reason>`.
+- Never remove legacy behavior without explicit approval.
+- If backward compatibility is impossible for any reason, explain the breaking change and its impact to the user, and obtain explicit approval **before implementation**.
+
 ## Architecture
 
 Use lightweight, feature-oriented hexagonal architecture adapted to Expo/React Native. This layout describes responsibilities, not a file inventory. Create directories only when needed; update this document only when architectural boundaries change.
